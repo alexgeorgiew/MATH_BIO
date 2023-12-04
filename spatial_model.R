@@ -1,11 +1,13 @@
 lamda = 2;
 c = 1;
 a = 1;
-dh = 0.01;
-dp = 0.01;
+dh = 0.11;
+dp = 0.5;
 
 T = 50 #how many itarations
 n = 30 #size of grid
+vectorH = rep(0,T);
+vectorP = rep(0,T);
 vector1 = rep(0,n);
 vector2 = rep(0,n);
 H = array(c(vector1, vector2), dim = c(n, n, 1)); 
@@ -63,10 +65,12 @@ Ppast[n/2,n/2,1] = 1;
 for(iteration in 1:T){
   for (row in 1:n){
     for (col in 1:n){
-      Haux[row,col,1] = (1-dh) * Hpast[row,col,1] + dh/8*(mysum(n,row,col,Hpast));
-      Paux[row,col,1] = (1-dp) * Ppast[row,col,1] + dp/8*(mysum(n,row,col,Ppast));
+      invisible( capture.output(Haux[row,col,1] <- (1-dh) * Hpast[row,col,1] + dh/8*(mysum(n,row,col,Hpast))));
+      invisible(capture.output(Paux[row,col,1] <- (1-dp) * Ppast[row,col,1] + dp/8*(mysum(n,row,col,Ppast))));
       H[row,col,1] = lamda*Haux[row,col,1]*exp(-a*Paux[row,col,1]);
       P[row,col,1] = c*Haux[row,col,1]*(1-exp(-a*Paux[row,col,1]));
+      vectorH[iteration] =  vectorH[iteration] + H[row,col,1]; ### Calculate overall population for hosts
+      vectorP[iteration] =  vectorP[iteration] + P[row,col,1]; ### Calculate overall population for parasites
     }
   }
   for(row in 1:n){
@@ -80,13 +84,33 @@ for(iteration in 1:T){
 
 
 
-#for (row in 1:n){
-#  for (col in 1:n){
- #   print(sprintf("(%d,%d) = %f",row,col,H[row,col,1]));
-#  }
-#}
+
 mat <- matrix(H, nrow = n, ncol = n)
-#mat
+
 image(mat,col=grey.colors(n, start = 0.3, end = 0.9, gamma = 2.2, alpha = NULL, rev = FALSE))
+
+
+
+plot((1:T),vectorP);   #Population for every iteration
+plot((1:T),vectorH);
+
+########### Задача 1
+    # СКРИПТ    
+########### Задача 2
+    # ФОРМУЛА ЗА СУМИТЕ ПО ГРАНИЦАТА НА РЕШЕТКАТА
+    # 
+    #
+#dh,dp? за да бъдат популациите > 0
+########### Задача 3
+    #при dh=0.01 и dp=0.01 се получава спирала
+
+########### Задача 4
+
+########### Задача 5
+#  (1)При голямо 'lamda' популацията  от гостоприемници достига по-рано големи популации и се срива след това
+#  (2)При голямо 'c' популацията от паразити достига рано пик и след това се срива  
+#  (3)При малко 'а' и двете популации достигат пик почти в едни и същи итерации и след това се сриват
+#
+
 
 
