@@ -1,11 +1,11 @@
 lamda = 2;
 c = 1;
-a = 1;
-dh = 0.11;
-dp = 0.5;
+a = 0.068;
+dh = 0.55;
+dp = 0.25;
 
-T = 50 #how many itarations
-n = 30 #size of grid
+T = 120 #how many itarations
+n = 20 #size of grid
 vectorH = rep(0,T);
 vectorP = rep(0,T);
 vector1 = rep(0,n);
@@ -52,13 +52,15 @@ mysum <- function(size,i,j,arr){
 #################### Initilize POPULATION
   for (row in 1:n){
     for (col in 1:n){
-      H[row,col,1] = 1;
-      Hpast[row,col,1] = 1;
+      H[row,col,1] = 0;
+      Hpast[row,col,1] = 0;
     }
   }
+H[n/2,n/2,1] = lamda*log(lamda)/((lamda-1)*a*c);
+Hpast[n/2,n/2,1] = lamda*log(lamda)/((lamda-1)*a*c);
 
-P[n/2,n/2,1] = 1;
-Ppast[n/2,n/2,1] = 1;
+P[n/2,n/2,1] = log(lamda)/a;
+Ppast[n/2,n/2,1] = log(lamda)/a;
 #################### Initilize POPULATION
 
 ############## Generate Iterations
@@ -93,7 +95,7 @@ image(mat,col=grey.colors(n, start = 0.3, end = 0.9, gamma = 2.2, alpha = NULL, 
 
 plot((1:T),vectorP);   #Population for every iteration
 plot((1:T),vectorH);
-
+#vectorP
 ########### Задача 1
     # СКРИПТ    
 ########### Задача 2
@@ -111,6 +113,7 @@ plot((1:T),vectorH);
 #  (2)При голямо 'c' популацията от паразити достига рано пик и след това се срива  
 #  (3)При малко 'а' и двете популации достигат пик почти в едни и същи итерации и след това се сриват
 #
+
 
 
 
